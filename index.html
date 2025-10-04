@@ -1,112 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Justin's Developer Portfolio</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Justin — Developer Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@600&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-      color: #f0f0f0;
+    :root{
+      --bg-1: #07132a;
+      --bg-2: #0f2b3b;
+      --glass: rgba(255,255,255,0.06);
+      --accent: #00ffcc;
+      --muted: rgba(255,255,255,0.75);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      color:#eaf8f6;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(0,255,204,0.06), transparent),
+                  radial-gradient(1000px 500px at 90% 90%, rgba(0,200,255,0.04), transparent),
+                  linear-gradient(120deg,var(--bg-1),var(--bg-2));
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      min-height:100vh;
+      overflow-x:hidden;
     }
 
-    header {
-      background-color: rgba(0, 0, 0, 0.7);
-      padding: 30px 20px;
-      text-align: center;
+    /* animated shifting gradient overlay */
+    .bg-shift{
+      position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:screen;opacity:0.35;
+      background:linear-gradient(60deg, rgba(0,255,204,0.12), rgba(0,160,255,0.12), rgba(160,100,255,0.08));
+      background-size:400% 400%;
+      animation:shift 18s linear infinite;
+    }
+    @keyframes shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    .page{
+      position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:48px 24px 80px;
     }
 
-    header h1 {
-      font-size: 2.5em;
-      margin: 0;
-      color: #00ffcc;
+    header.top{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:36px;
     }
-
-    .content {
-      padding: 40px 20px;
-      max-width: 800px;
-      margin: auto;
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{
+      width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#66d9ff);display:flex;align-items:center;justify-content:center;color:#002a2a;font-weight:800;font-family:'Poppins';box-shadow:0 6px 18px rgba(0,0,0,0.45);
     }
+    .brand h1{margin:0;font-size:1.125rem;letter-spacing:0.2px}
+    .nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-weight:600}
 
-    .section {
-      margin-bottom: 40px;
-    }
+    /* hero */
+    .hero{display:grid;grid-template-columns:1fr 380px;gap:28px;align-items:center;margin-bottom:36px}
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.04);padding:28px;border-radius:16px;backdrop-filter:blur(6px);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    .hero h2{margin:0 0 8px;font-size:1.75rem;color:var(--accent)}
+    .type{font-weight:600;color:#dff9f5}
+    .intro{color:rgba(235,250,248,0.9);line-height:1.5}
 
-    h2 {
-      color: #00ffff;
-    }
+    /* floating blob */
+    .blob-wrap{position:relative;height:260px;display:flex;align-items:center;justify-content:center}
+    .blob{width:320px;height:320px;border-radius:42% 58% 60% 40% / 40% 50% 50% 60%;background:linear-gradient(135deg,#004e66 0%, #008080 40%, #00ffcc 100%);filter:blur(12px);opacity:0.14;animation:float 6s ease-in-out infinite}
+    @keyframes float{0%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)}100%{transform:translateY(0) rotate(-2deg)}}
 
-    ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
+    /* sections */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:18px}
+    .card{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:18px;border-radius:12px;min-height:120px;opacity:0;transform:translateY(18px);transition:all 520ms cubic-bezier(.2,.9,.2,1)}
+    .card.show{opacity:1;transform:none}
+    h3{margin:0 0 10px;color:#c8fff5}
+    p{margin:0;color:rgba(230,250,248,0.92)}
 
-    li::before {
-      content: "★ ";
-      color: #00ffcc;
-    }
+    ul.skills{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:6px 0 0;list-style:none}
+    ul.skills li{background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-size:0.9rem}
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: rgba(0, 0, 0, 0.5);
-      font-size: 0.9em;
-    }
+    footer{margin-top:40px;text-align:center;color:rgba(230,250,248,0.7);font-size:0.9rem}
 
-    a {
-      color: #00ffff;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
+    /* small screens */
+    @media (max-width:880px){
+      .hero{grid-template-columns:1fr;}
+      .blob{display:none}
     }
   </style>
 </head>
 <body>
+  <div class="bg-shift" aria-hidden="true"></div>
 
-  <header>
-    <h1>Welcome to Justin's Developer Portfolio!</h1>
-  </header>
+  <main class="page">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">J</div>
+        <div>
+          <h1>Justin — Developer</h1>
+          <div style="font-size:0.85rem;color:rgba(235,250,248,0.8)">Python • Game Dev • Web</div>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#goals">Goals</a>
+        <a href="#github" target="_blank">GitHub</a>
+      </nav>
+    </header>
 
-  <div class="content">
-    <div class="section">
-      <h2>💻 About Me</h2>
-      <p>Hey! I'm Justin, a passionate coder who knows Python and is currently learning GitHub. I love building cool projects and games!</p>
-    </div>
+    <section class="hero">
+      <div class="hero-card">
+        <h2>Hello — I'm Justin</h2>
+        <div class="type"> <span id="typewriter"></span><span style="color:var(--accent)">|</span></div>
+        <p class="intro" style="margin-top:12px">A passionate coder learning Git, building Python projects and games. I enjoy turning ideas into playful, working prototypes.</p>
 
-    <div class="section">
-      <h2>🧠 Skills</h2>
-      <ul>
-        <li>Python Programming</li>
-        <li>Git & GitHub (Learning)</li>
-        <li>Game Development (Beginner Projects)</li>
-        <li>Problem Solving & Logic</li>
-      </ul>
-    </div>
+        <div class="grid" style="margin-top:18px">
+          <div class="card" data-reveal>
+            <h3>💻 About Me</h3>
+            <p>I'm learning GitHub and creating small games and tools in Python. Curious and always building.</p>
+          </div>
+          <div class="card" data-reveal>
+            <h3>🚀 Current Focus</h3>
+            <p>Git proficiency, intermediate Python, game mechanics, and web frameworks like Flask.</p>
+          </div>
+        </div>
+      </div>
 
-    <div class="section">
-      <h2>🚀 Current Goals</h2>
-      <ul>
-        <li>Master Git and GitHub for version control</li>
-        <li>Build advanced Python projects</li>
-        <li>Create a 2D or simple 3D game</li>
-        <li>Learn Flask or Django (web development)</li>
-      </ul>
-    </div>
+      <div class="blob-wrap" aria-hidden="true">
+        <div class="blob"></div>
+      </div>
+    </section>
 
-    <div class="section">
-      <h2>📂 GitHub Profile</h2>
-      <p>Check out my work and progress on <a href="https://github.com/" target="_blank">GitHub</a>.</p>
-    </div>
-  </div>
+    <section id="skills" style="margin-top:6px">
+      <div class="hero-card">
+        <h3 style="margin-bottom:6px">🧠 Skills</h3>
+        <ul class="skills">
+          <li>Python</li>
+          <li>Git & GitHub</li>
+          <li>Game Dev</li>
+          <li>Problem Solving</li>
+          <li>Flask (learning)</li>
+        </ul>
+      </div>
+    </section>
 
-  <footer>
-    Made with 💙 by Justin | © 2025
-  </footer>
+    <section id="goals" style="margin-top:18px">
+      <div class="hero-card">
+        <h3>🎯 Goals</h3>
+        <ul style="margin-top:8px">
+          <li>Master Git & GitHub</li>
+          <li>Build advanced Python projects</li>
+          <li>Create a 2D game</li>
+          <li>Learn Flask or Django</li>
+        </ul>
+      </div>
+    </section>
 
+    <section id="github" style="margin-top:18px">
+      <div class="hero-card">
+        <h3>📂 GitHub</h3>
+        <p>Check out my repositories and projects on <a href="https://github.com/" target="_blank" style="color:var(--accent)">GitHub</a>.</p>
+      </div>
+    </section>
+
+    <footer>
+      Made with 💙 by Justin | © 2025
+    </footer>
+  </main>
+
+  <script>
+    // typewriter - simple loop
+    (function(){
+      const el = document.getElementById('typewriter');
+      const words = ['Student & Coder','Python Developer','Game Maker','Learning GitHub'];
+      let i=0;let j=0;let forward=true;let cur='';
+      function step(){
+        const word = words[i];
+        if(forward){
+          cur = word.slice(0,++j);
+          if(j===word.length){forward=false;setTimeout(step,900);return}
+        } else {
+          cur = word.slice(0,--j);
+          if(j===0){forward=true;i=(i+1)%words.length}
+        }
+        el.textContent = cur;
+        setTimeout(step, forward?90:40);
+      }
+      step();
+    })();
+
+    // scroll reveal
+    (function(){
+      const obs = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting) e.target.classList.add('show');
+        });
+      },{threshold:0.12});
+      document.querySelectorAll('[data-reveal]').forEach(n=>obs.observe(n));
+      // also reveal hero cards and skills
+      document.querySelectorAll('.hero-card').forEach((c,i)=>setTimeout(()=>c.classList.add('show'),120*i+100));
+    })();
+  </script>
 </body>
 </html>
